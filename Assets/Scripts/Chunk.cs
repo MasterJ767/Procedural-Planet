@@ -14,27 +14,27 @@ public class Chunk : MonoBehaviour
         List<Vector3> vertices = new List<Vector3>();
         List<Vector3> normals = new List<Vector3>();
         List<int> triangles = new List<int>();
-        int vertexIndex = 0;
 
-        for (int x = 0; x < Config.ChunkWidth; ++x)
+        for (int x = 0; x < Config.ChunkWidth + 1; ++x)
         {
-            for (int z = 0; z < Config.ChunkWidth; ++z)
+            for (int z = 0; z < Config.ChunkWidth + 1; ++z)
             {
                 vertices.Add(new Vector3(x * Config.Scale, 0, z * Config.Scale));
                 normals.Add(Vector3.up);
-                
-                if (x < Config.ChunkWidth - 1 && z < Config.ChunkWidth - 1) 
-                {
-                    triangles.Add(vertexIndex);
-                    triangles.Add(vertexIndex + 1);
-                    triangles.Add(vertexIndex + Config.ChunkWidth);
-                    triangles.Add(vertexIndex + Config.ChunkWidth);
-                    triangles.Add(vertexIndex + 1);
-                    triangles.Add(vertexIndex + Config.ChunkWidth + 1);
-                }
-
-                vertexIndex++;
             }
+        }
+
+        int rowOffset = Config.ChunkWidth + 1;
+        for (int i = 0; i < (Config.ChunkWidth * Config.ChunkWidth); ++i)
+        {
+            int offset = i / Config.ChunkWidth;
+            int j = i + offset;
+            triangles.Add(j);
+            triangles.Add(j + 1);
+            triangles.Add(j + rowOffset);
+            triangles.Add(j + rowOffset);
+            triangles.Add(j + 1);
+            triangles.Add(j + rowOffset + 1);
         }
 
         Mesh mesh = new Mesh();

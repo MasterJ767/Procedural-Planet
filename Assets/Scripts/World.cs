@@ -19,7 +19,7 @@ public class World : MonoBehaviour
         {
             for (int z = 0; z < Config.WorldWidthInChunks; z++)
             {
-                Vector3 chunkPosition = new Vector3(x * (Config.ChunkWidth * Config.Scale) - x, 0, z * (Config.ChunkWidth * Config.Scale) - z);
+                Vector3 chunkPosition = new Vector3(x * (Config.ChunkWidth * Config.Scale), 0, z * (Config.ChunkWidth * Config.Scale));
                 Transform newChunk = Instantiate(chunkPrefab, chunkPosition, Quaternion.identity, transform);
                 newChunk.name = "(" + x + ", " + z + ")";
                 Chunk chunk = newChunk.GetComponent<Chunk>();
