@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class World : MonoBehaviour
 {
+    public NoiseSettings noise;
     public Transform chunkPrefab;
 
     private List<Chunk> chunks = new List<Chunk>();
@@ -23,9 +25,16 @@ public class World : MonoBehaviour
                 Transform newChunk = Instantiate(chunkPrefab, chunkPosition, Quaternion.identity, transform);
                 newChunk.name = "(" + x + ", " + z + ")";
                 Chunk chunk = newChunk.GetComponent<Chunk>();
+                chunk.Initialise(noise);
                 chunk.Render();
                 chunks.Add(chunk);
             }
         }
     }
+}
+
+[Serializable]
+public struct NoiseSettings
+{
+    public float scale;
 }

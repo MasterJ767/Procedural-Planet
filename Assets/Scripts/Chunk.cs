@@ -6,21 +6,30 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class Chunk : MonoBehaviour
 {
+    private NoiseSettings noiseSettings;
+
+    public void Initialise(NoiseSettings noiseSettings)
+    {
+        this.noiseSettings = noiseSettings;
+    }
+
     public void Render()
     {
         MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
         MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
 
         List<Vector3> vertices = new List<Vector3>();
-        List<Vector3> normals = new List<Vector3>();
         List<int> triangles = new List<int>();
 
         for (int x = 0; x < Config.ChunkWidth + 1; ++x)
         {
             for (int z = 0; z < Config.ChunkWidth + 1; ++z)
             {
-                vertices.Add(new Vector3(x * Config.Scale, 0, z * Config.Scale));
-                normals.Add(Vector3.up);
+                Vector3 localVertexPosition = new Vector3(x * Config.Scale, 0, z * Config.Scale);
+                Vector3 globalVertexPosition = localVertexPosition + transform.position;
+                localVertexPosition.y = EvaluateNoise(globalVertexPosition.x, globalVertexPosition.z);
+                vertices.Add(localVertexPosition);
+                
             }
         }
 
@@ -40,9 +49,21 @@ public class Chunk : MonoBehaviour
         Mesh mesh = new Mesh();
         mesh.SetVertices(vertices.ToArray());
         mesh.SetTriangles(triangles.ToArray(), 0);
-        mesh.SetNormals(normals.ToArray());
+        mesh.RecalculateNormals();
         mesh.Optimize();
 
         meshFilter.sharedMesh = mesh;
+    }
+
+    private float EvaluateNoise(float xCoord, float zCoord)
+    {
+        float x = xCoord / Config.WorldWidthInVertices * noiseSettings.scale;
+        float z = zCoord / Config.WorldWidthInVertices * noiseSettings.scale;
+
+        float noise = Mathf.PerlinNoise(x, z);
+        noise *= Config.ChunkHeight;
+        noise = Mathf.Clamp(noise, Config.MinimunTerrainHeight, Config.ChunkHeight);
+
+        return noise;
     }
 }
