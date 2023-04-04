@@ -6,11 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class Chunk : MonoBehaviour
 {
-    private void Start()
-    {
-        Render();
-    }
-
     public void Render()
     {
         MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();

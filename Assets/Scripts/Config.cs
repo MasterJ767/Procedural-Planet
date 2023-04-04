@@ -9,7 +9,6 @@ public class Config : MonoBehaviour
     public static readonly int ChunkHeight = 256;
     public static readonly int WorldWidthInChunks = 5;
 
-    public static int WorldWidth => WorldWidthInChunks * ChunkWidth;
     public static int MinimunTerrainHeight => ChunkHeight / 6;
     public static int SeaLevel => ChunkHeight / 4;
 }
