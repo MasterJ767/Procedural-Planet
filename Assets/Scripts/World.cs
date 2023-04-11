@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
-    public NoiseSettings noise;
+    public NoiseSettings noiseSettings;
     public Transform chunkPrefab;
 
     private List<Chunk> chunks = new List<Chunk>();
@@ -25,7 +25,7 @@ public class World : MonoBehaviour
                 Transform newChunk = Instantiate(chunkPrefab, chunkPosition, Quaternion.identity, transform);
                 newChunk.name = "(" + x + ", " + z + ")";
                 Chunk chunk = newChunk.GetComponent<Chunk>();
-                chunk.Initialise(noise);
+                chunk.Initialise(noiseSettings);
                 chunk.Render();
                 chunks.Add(chunk);
             }
@@ -36,5 +36,16 @@ public class World : MonoBehaviour
 [Serializable]
 public struct NoiseSettings
 {
+    public NoiseLayer[] layers;
+}
+
+[Serializable]
+public struct NoiseLayer 
+{
     public float scale;
+    [Range(1, 8)]
+    public int octaves;
+    [Range(0f, 1f)]
+    public float persistence;
+    public float lacunarity;
 }

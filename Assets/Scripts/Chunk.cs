@@ -27,7 +27,6 @@ public class Chunk : MonoBehaviour
             {
                 Vector3 localVertexPosition = new Vector3(x * Config.Scale, 0, z * Config.Scale);
                 Vector3 globalVertexPosition = localVertexPosition + transform.position;
-                localVertexPosition.y = EvaluateNoise(globalVertexPosition.x, globalVertexPosition.z);
                 vertices.Add(localVertexPosition);
                 
             }
@@ -57,13 +56,32 @@ public class Chunk : MonoBehaviour
 
     private float EvaluateNoise(float xCoord, float zCoord)
     {
-        float x = xCoord / Config.WorldWidthInVertices * noiseSettings.scale;
-        float z = zCoord / Config.WorldWidthInVertices * noiseSettings.scale;
+        float x = xCoord / Config.WorldWidthInVertices;
+        float z = zCoord / Config.WorldWidthInVertices;
 
-        float noise = Mathf.PerlinNoise(x, z);
-        noise *= Config.ChunkHeight;
-        noise = Mathf.Clamp(noise, Config.MinimunTerrainHeight, Config.ChunkHeight);
+        float vertexModifier = 0;
+        for (int i = 0; i < noiseSettings.layers.Length; ++i) {
+            float noiseValue = PerlinNoise2D(x * noiseSettings.layers[i].scale, z * noiseSettings.layers[i].scale, i);
+            noiseValue = Mathf.Max(0, noiseValue);
+            vertexModifier += noiseValue;
+            if (noiseValue == 0) { break; }
+        }
+        vertexModifier /= noiseSettings.layers.Length;
+        return Config.ChunkHeight * vertexModifier;
+    }
 
-        return noise;
+    private float PerlinNoise2D(float x, float z, int i) {
+        float total = 0;
+        float frequency = 1;
+        float amplitude = 1;
+        int n = noiseSettings.layers[i].octaves;
+
+        for (int j = 0; i < n; ++j) {
+            total += (Mathf.PerlinNoise(x * frequency, z * frequency) * amplitude);
+            frequency *= noiseSettings.layers[i].lacunarity;
+            amplitude *= noiseSettings.layers[i].persistence;
+        }
+
+        return total;
     }
 }
