@@ -8,7 +8,6 @@ public class World : MonoBehaviour
     public int radius;
     public int subdivisions;
     public Transform chunkPrefab;
-    public Textures textures;
 
     private List<Chunk> chunks = new List<Chunk>();
 
@@ -68,15 +67,9 @@ public class World : MonoBehaviour
             Transform newChunk = Instantiate(chunkPrefab, Vector3.zero, Quaternion.identity, transform);
             newChunk.name = "(" + i + ")";
             Chunk chunk = newChunk.GetComponent<Chunk>();
-            chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], radius, subdivisions, textures);
+            chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], radius, subdivisions);
             chunk.Render();
             chunks.Add(chunk);
         }
     }
-}
-
-[Serializable]
-public struct Textures {
-    public Texture2D[] diffuseTextures;
-    public Texture2D[] normalTextures;
 }

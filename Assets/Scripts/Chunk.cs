@@ -8,17 +8,16 @@ public class Chunk : MonoBehaviour
 {
     private int radius;
     private int subdivisions;
-    private Textures textures;
     private List<Vector3> vertices = new List<Vector3>();
     private List<int> triangles = new List<int>();
     private List<Vector2> uvs = new List<Vector2>();
+    private List<Vector3> normals = new List<Vector3>();
+    private bool show = false;
 
-    public void Initialise(Vector3 firstPos, Vector3 secondPos, Vector3 thirdPos, int radius, int subdivisions, Textures textures)
+    public void Initialise(Vector3 firstPos, Vector3 secondPos, Vector3 thirdPos, int radius, int subdivisions)
     {
         this.radius = radius;
         this.subdivisions = subdivisions;
-        this.textures = textures;
-        SetMaterialTextures();
 
         vertices.Add(firstPos);
         vertices.Add(secondPos);
@@ -28,24 +27,17 @@ public class Chunk : MonoBehaviour
         triangles.Add(2);
     }
 
-    public void SetMaterialTextures() {
-        Texture2DArray textureArray = new Texture2DArray(textures.diffuseTextures[0].width,
-            textures.diffuseTextures[0].height, textures.diffuseTextures.Length, textures.diffuseTextures[0].format, false);
-        for (int i = 0; i < textures.diffuseTextures.Length; i++)
-        {
-            textureArray.SetPixels(textures.diffuseTextures[i].GetPixels(), i);
+    private void OnDrawGizmos() {
+        if (show) {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(vertices[0], vertices[0] + normals[0]);
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(vertices[0] + normals[0], vertices[0] + normals[0] + Vector3.up);
+            /*for (int j = 0; j < vertices.Count; ++j) {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(vertices[j], vertices[j] + normals[j]);
+            }*/
         }
-        textureArray.Apply();
-        GetComponent<MeshRenderer>().material.SetTexture("_DiffuseTextures", textureArray);
-
-        Texture2DArray normalArray = new Texture2DArray(textures.normalTextures[0].width,
-            textures.normalTextures[0].height, textures.normalTextures.Length, textures.normalTextures[0].format, false);
-        for (int i = 0; i < textures.normalTextures.Length; i++)
-        {
-            normalArray.SetPixels(textures.normalTextures[i].GetPixels(), i);
-        }
-        normalArray.Apply();
-        GetComponent<MeshRenderer>().material.SetTexture("_NormalTextures", normalArray);
     }
 
     public void Render()
@@ -57,15 +49,18 @@ public class Chunk : MonoBehaviour
             Subdivide();
         }
 
+        show = true;
+
         for (int j = 0; j < vertices.Count; ++j) {
-           vertices[j] = vertices[j].normalized * radius; 
+            normals.Add(vertices[j].normalized);
+            vertices[j] = vertices[j].normalized; 
         }
 
         Mesh mesh = new Mesh();
         mesh.SetVertices(vertices.ToArray());
         mesh.SetTriangles(triangles.ToArray(), 0);
         mesh.SetUVs(0, uvs.ToArray());
-        mesh.RecalculateNormals();
+        mesh.SetNormals(normals.ToArray());
         mesh.Optimize();
 
         meshFilter.sharedMesh = mesh;
