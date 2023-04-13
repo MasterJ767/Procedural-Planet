@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
-    public NoiseSettings noiseSettings;
+    public int radius;
+    public int subdivisions;
     public Transform chunkPrefab;
+    public Textures textures;
 
     private List<Chunk> chunks = new List<Chunk>();
 
@@ -17,35 +19,64 @@ public class World : MonoBehaviour
 
     private void CreateWorld()
     {
-        for (int x = 0; x < Config.WorldWidthInChunks; x++)
+        float phi = (1f + Mathf.Sqrt(5f)) * 0.5f;
+        float a = 1f;
+        float b = 1f / phi;
+
+        Vector3[] verts = new[]
         {
-            for (int z = 0; z < Config.WorldWidthInChunks; z++)
-            {
-                Vector3 chunkPosition = new Vector3(x * (Config.ChunkWidth * Config.Scale), 0, z * (Config.ChunkWidth * Config.Scale));
-                Transform newChunk = Instantiate(chunkPrefab, chunkPosition, Quaternion.identity, transform);
-                newChunk.name = "(" + x + ", " + z + ")";
-                Chunk chunk = newChunk.GetComponent<Chunk>();
-                chunk.Initialise(noiseSettings);
-                chunk.Render();
-                chunks.Add(chunk);
-            }
+            new Vector3(0, b, -a),
+            new Vector3(b, a, 0),
+            new Vector3(-b, a, 0),
+            new Vector3(0, b, a),
+            new Vector3(0, -b, a),
+            new Vector3(-a, 0, b),
+            new Vector3(0, -b, -a),
+            new Vector3(a, 0, -b),
+            new Vector3(a, 0, b),
+            new Vector3(-a, 0, -b),
+            new Vector3(b, -a, 0),
+            new Vector3(-b, -a, 0)
+        };
+
+        int[] tris = new []
+        {
+            2, 1, 0,
+            1, 2, 3,
+            5, 4, 3,
+            4, 8, 3,
+            7, 6, 0,
+            6, 9, 0,
+            11, 10, 4,
+            10, 11, 6,
+            9, 5, 2,
+            5, 9, 11,
+            8, 7, 1,
+            7, 8, 10,
+            2, 5, 3,
+            8, 1, 3,
+            9, 2, 0,
+            1, 7, 0,
+            11, 9, 6,
+            7, 10, 6,
+            5, 11, 4,
+            10, 8, 4
+        };
+
+        for (int i = 0; i < tris.Length / 3; ++i)
+        {
+            Transform newChunk = Instantiate(chunkPrefab, Vector3.zero, Quaternion.identity, transform);
+            newChunk.name = "(" + i + ")";
+            Chunk chunk = newChunk.GetComponent<Chunk>();
+            chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], radius, subdivisions, textures);
+            chunk.Render();
+            chunks.Add(chunk);
         }
     }
 }
 
 [Serializable]
-public struct NoiseSettings
-{
-    public NoiseLayer[] layers;
-}
-
-[Serializable]
-public struct NoiseLayer 
-{
-    public float scale;
-    [Range(1, 8)]
-    public int octaves;
-    [Range(0f, 1f)]
-    public float persistence;
-    public float lacunarity;
+public struct Textures {
+    public Texture2D[] diffuseTextures;
+    public Texture2D[] normalTextures;
 }

@@ -6,82 +6,100 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class Chunk : MonoBehaviour
 {
-    private NoiseSettings noiseSettings;
+    private int radius;
+    private int subdivisions;
+    private Textures textures;
+    private List<Vector3> vertices = new List<Vector3>();
+    private List<int> triangles = new List<int>();
+    private List<Vector2> uvs = new List<Vector2>();
 
-    public void Initialise(NoiseSettings noiseSettings)
+    public void Initialise(Vector3 firstPos, Vector3 secondPos, Vector3 thirdPos, int radius, int subdivisions, Textures textures)
     {
-        this.noiseSettings = noiseSettings;
+        this.radius = radius;
+        this.subdivisions = subdivisions;
+        this.textures = textures;
+        SetMaterialTextures();
+
+        vertices.Add(firstPos);
+        vertices.Add(secondPos);
+        vertices.Add(thirdPos);
+        triangles.Add(0);
+        triangles.Add(1);
+        triangles.Add(2);
+    }
+
+    public void SetMaterialTextures() {
+        Texture2DArray textureArray = new Texture2DArray(textures.diffuseTextures[0].width,
+            textures.diffuseTextures[0].height, textures.diffuseTextures.Length, textures.diffuseTextures[0].format, false);
+        for (int i = 0; i < textures.diffuseTextures.Length; i++)
+        {
+            textureArray.SetPixels(textures.diffuseTextures[i].GetPixels(), i);
+        }
+        textureArray.Apply();
+        GetComponent<MeshRenderer>().material.SetTexture("_DiffuseTextures", textureArray);
+
+        Texture2DArray normalArray = new Texture2DArray(textures.normalTextures[0].width,
+            textures.normalTextures[0].height, textures.normalTextures.Length, textures.normalTextures[0].format, false);
+        for (int i = 0; i < textures.normalTextures.Length; i++)
+        {
+            normalArray.SetPixels(textures.normalTextures[i].GetPixels(), i);
+        }
+        normalArray.Apply();
+        GetComponent<MeshRenderer>().material.SetTexture("_NormalTextures", normalArray);
     }
 
     public void Render()
     {
-        MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
-        MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
+        MeshFilter meshFilter = GetComponent<MeshFilter>();
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
 
-        List<Vector3> vertices = new List<Vector3>();
-        List<int> triangles = new List<int>();
-
-        for (int x = 0; x < Config.ChunkWidth + 1; ++x)
-        {
-            for (int z = 0; z < Config.ChunkWidth + 1; ++z)
-            {
-                Vector3 localVertexPosition = new Vector3(x * Config.Scale, 0, z * Config.Scale);
-                Vector3 globalVertexPosition = localVertexPosition + transform.position;
-                vertices.Add(localVertexPosition);
-                
-            }
+        for (int i = 0; i < subdivisions; ++i) {
+            Subdivide();
         }
 
-        int rowOffset = Config.ChunkWidth + 1;
-        for (int i = 0; i < (Config.ChunkWidth * Config.ChunkWidth); ++i)
-        {
-            int offset = i / Config.ChunkWidth;
-            int j = i + offset;
-            triangles.Add(j);
-            triangles.Add(j + 1);
-            triangles.Add(j + rowOffset);
-            triangles.Add(j + rowOffset);
-            triangles.Add(j + 1);
-            triangles.Add(j + rowOffset + 1);
+        for (int j = 0; j < vertices.Count; ++j) {
+           vertices[j] = vertices[j].normalized * radius; 
         }
 
         Mesh mesh = new Mesh();
         mesh.SetVertices(vertices.ToArray());
         mesh.SetTriangles(triangles.ToArray(), 0);
+        mesh.SetUVs(0, uvs.ToArray());
         mesh.RecalculateNormals();
         mesh.Optimize();
 
         meshFilter.sharedMesh = mesh;
     }
 
-    private float EvaluateNoise(float xCoord, float zCoord)
-    {
-        float x = xCoord / Config.WorldWidthInVertices;
-        float z = zCoord / Config.WorldWidthInVertices;
+    public void Subdivide() {
+        List<int> newTriangles = new List<int>();
+        int currentIndex = vertices.Count;
 
-        float vertexModifier = 0;
-        for (int i = 0; i < noiseSettings.layers.Length; ++i) {
-            float noiseValue = PerlinNoise2D(x * noiseSettings.layers[i].scale, z * noiseSettings.layers[i].scale, i);
-            noiseValue = Mathf.Max(0, noiseValue);
-            vertexModifier += noiseValue;
-            if (noiseValue == 0) { break; }
+        for (int i = 0; i < triangles.Count / 3; ++i) {
+            Vector3 m1 = Vector3.Lerp(vertices[triangles[i * 3]], vertices[triangles[(i * 3) + 1]], 0.5f);
+            Vector3 m2 = Vector3.Lerp(vertices[triangles[(i * 3) + 1]], vertices[triangles[(i * 3) + 2]], 0.5f);
+            Vector3 m3 = Vector3.Lerp(vertices[triangles[(i * 3) + 2]], vertices[triangles[i * 3]], 0.5f);
+
+            vertices.Add(m1);
+            vertices.Add(m2);
+            vertices.Add(m3);
+
+            newTriangles.Add(triangles[i * 3]);
+            newTriangles.Add(currentIndex);
+            newTriangles.Add(currentIndex + 2);
+            newTriangles.Add(triangles[(i * 3) + 1]);
+            newTriangles.Add(currentIndex + 1);
+            newTriangles.Add(currentIndex);
+            newTriangles.Add(triangles[(i * 3) + 2]);
+            newTriangles.Add(currentIndex + 2);
+            newTriangles.Add(currentIndex + 1);
+            newTriangles.Add(currentIndex);
+            newTriangles.Add(currentIndex + 1);
+            newTriangles.Add(currentIndex + 2);
+
+            currentIndex += 3;
         }
-        vertexModifier /= noiseSettings.layers.Length;
-        return Config.ChunkHeight * vertexModifier;
-    }
 
-    private float PerlinNoise2D(float x, float z, int i) {
-        float total = 0;
-        float frequency = 1;
-        float amplitude = 1;
-        int n = noiseSettings.layers[i].octaves;
-
-        for (int j = 0; i < n; ++j) {
-            total += (Mathf.PerlinNoise(x * frequency, z * frequency) * amplitude);
-            frequency *= noiseSettings.layers[i].lacunarity;
-            amplitude *= noiseSettings.layers[i].persistence;
-        }
-
-        return total;
+        triangles = newTriangles;
     }
 }
