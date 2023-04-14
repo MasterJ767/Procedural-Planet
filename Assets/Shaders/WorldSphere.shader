@@ -66,7 +66,7 @@ Shader "Unlit/WorldSphere"
             v2f vert (appdata v)
             {
                 float noiseValue = (noise(v.vertex * _NoiseScale + _NoiseOffset.xyz) + 1) / 2;
-                float displacement = v.normal * float4(noiseValue, noiseValue, noiseValue, 1);
+                float4 displacement = v.normal * float4(noiseValue, noiseValue, noiseValue, 1);
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex * _Radius + displacement);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);

@@ -12,7 +12,6 @@ public class Chunk : MonoBehaviour
     private List<int> triangles = new List<int>();
     private List<Vector2> uvs = new List<Vector2>();
     private List<Vector3> normals = new List<Vector3>();
-    private bool show = false;
 
     public void Initialise(Vector3 firstPos, Vector3 secondPos, Vector3 thirdPos, int radius, int subdivisions)
     {
@@ -27,19 +26,6 @@ public class Chunk : MonoBehaviour
         triangles.Add(2);
     }
 
-    private void OnDrawGizmos() {
-        if (show) {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(vertices[0], vertices[0] + normals[0]);
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(vertices[0] + normals[0], vertices[0] + normals[0] + Vector3.up);
-            /*for (int j = 0; j < vertices.Count; ++j) {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawLine(vertices[j], vertices[j] + normals[j]);
-            }*/
-        }
-    }
-
     public void Render()
     {
         MeshFilter meshFilter = GetComponent<MeshFilter>();
@@ -48,8 +34,6 @@ public class Chunk : MonoBehaviour
         for (int i = 0; i < subdivisions; ++i) {
             Subdivide();
         }
-
-        show = true;
 
         for (int j = 0; j < vertices.Count; ++j) {
             normals.Add(vertices[j].normalized);
