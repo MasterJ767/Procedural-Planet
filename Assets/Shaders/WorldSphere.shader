@@ -6,7 +6,10 @@ Shader "Unlit/WorldSphere"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+        _SandTex ("Sand Texture", 2D) = "white" {}
+        _GrassTex ("Grass Texture", 2D) = "white" {}
+        _RockTex ("Rock Texture", 2D) = "white" {}
+        _IceTex ("Ice Texture", 2D) = "white" {}
         _Radius ("Radius", float) = 3.0
         _NoiseScale ("Noise Scale", float) = 3.0
         _NoiseOffset ("Noise Offset", vector) = (1,1,1)
@@ -43,8 +46,8 @@ Shader "Unlit/WorldSphere"
                 float4 objPos : TEXCOORD0;
             };
 
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
+            sampler2D _SandTex, _GrassTex, _RockTex, _IceTex;
+            float4 _SandTex_ST;
             float _Radius, _NoiseScale, _DisplacementAmplitude, _TextureScale;
             float4 _NoiseOffset;
 
@@ -95,7 +98,7 @@ Shader "Unlit/WorldSphere"
                 float2 x = i.objPos.zy / _TextureScale;
                 float2 y = i.objPos.xz / _TextureScale;
                 float2 z = i.objPos.xy / _TextureScale;
-                /*if (i.normal.x < 0) {
+                if (i.normal.x < 0) {
                     x.x = -x.x;
                 }
                 if (i.normal.y < 0) {
@@ -105,28 +108,37 @@ Shader "Unlit/WorldSphere"
                     z.x = -z.x;
                 }
                 x.y += 0.5;
-                z.x += 0.5;*/
+                z.x += 0.5;
 
                 float3 triW = abs(i.normal);
                 triW = triW / (triW.x + triW.y + triW.z);
-                
-                float3 albedoX = tex2D(_MainTex, x).rgb;
-                float3 albedoY = tex2D(_MainTex, y).rgb;
-                float3 albedoZ = tex2D(_MainTex, z).rgb;
 
-                fixed4 col = float4(albedoX * triW.x + albedoY * triW.y + albedoZ * triW.z, 1.0);
-                /*if (i.color.x < 0.65) {
-                    col = float4(albedoX * triW.x + albedoY * triW.y + albedoZ * triW.z, 1.0);
+                float3 albedoX;
+                float3 albedoY;
+                float3 albedoZ;
+                if (i.color.x < 0.65) {
+                    albedoX = tex2D(_SandTex, x).rgb;
+                    albedoY = tex2D(_SandTex, y).rgb;
+                    albedoZ = tex2D(_SandTex, z).rgb;
                 }
                 else if (i.color.x < 0.8) {
-                    col = float4(0.47, 0.82, 0.13, 1);
+                    albedoX = tex2D(_GrassTex, x).rgb;
+                    albedoY = tex2D(_GrassTex, y).rgb;
+                    albedoZ = tex2D(_GrassTex, z).rgb;
                 }
                 else if (i.color.x < 0.9) {
-                    col = float4(0.4, 0.4, 0.4, 1);
+                    albedoX = tex2D(_RockTex, x).rgb;
+                    albedoY = tex2D(_RockTex, y).rgb;
+                    albedoZ = tex2D(_RockTex, z).rgb;
                 }
                 else {
-                    col = float4(0.9, 0.9, 1, 1);
-                }*/
+                    albedoX = tex2D(_IceTex, x).rgb;
+                    albedoY = tex2D(_IceTex, y).rgb;
+                    albedoZ = tex2D(_IceTex, z).rgb;
+                }
+
+                fixed4 col = float4(albedoX * triW.x + albedoY * triW.y + albedoZ * triW.z, 1.0);
+                
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
