@@ -2,16 +2,11 @@ Shader "Custom/World"
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1)
-        _Tint ("Tint", Color) = (1,1,1,0)
-        _Glossiness ("Smoothness", Range(0,1)) = 0.5
-        _Metallic ("Metallic", Range(0,1)) = 0.0
-        _Radius ("Radius", float) = 100.0
-        _WorldWidthVertices ("WorldWidthVertices", float) = 400.0
-        _WorldHeight ("WorldHeight", float) = 128.0
-        _Amount("Amount", Range(0,1)) = 0
-        _MainTex("Main Texture", 2D) = "white"{}
-		_DisplacementTexture("Displacement Texture", 2D) = "white"{}
+        _MainTex ("Texture", 2D) = "white" {}
+        _Radius ("Radius", float) = 3.0
+        _NoiseScale ("Noise Scale", float) = 3.0
+        _NoiseOffset ("Noise Offset", vector) = (1,1,1)
+        _DisplacementAmplitude ("Displacement Amplitude", float) = 3.0
     }
     SubShader
     {
@@ -28,61 +23,85 @@ Shader "Custom/World"
 
         struct Input
         {
-            float2 uv_MainTex;
-            float displacementValue;
-            float4 truePosition;
+            float4 vertex : SV_POSITION;
+            float4 color : COLOR;
+            float4 normal : NORMAL;
+            float2 uv : TEXCOORD0;
         };
 
-        fixed4 _Color,_Tint;
-        half _Glossiness,_Metallic,_Radius,_WorldWidthVertices,_WorldHeight,_Amount;
-        sampler2D _MainTex,_DisplacementTexture;
+        sampler2D _MainTex;
+        float _Radius, _NoiseScale, _DisplacementAmplitude;
+        float4 _NoiseOffset;
 
         UNITY_INSTANCING_BUFFER_START(Props)
 
         UNITY_INSTANCING_BUFFER_END(Props)
 
+        float hash( float n )
+        {
+            return frac(sin(n)*43758.5453);
+        }
+
+        float noise( float3 x )
+        {
+            // The noise function returns a value in the range -1.0f -> 1.0f
+
+            float3 p = floor(x);
+            float3 f = frac(x);
+
+            f = f*f*(3.0-2.0*f);
+            float n = p.x + p.y*57.0 + 113.0*p.z;
+
+            float noise = lerp(lerp(lerp( hash(n+0.0), hash(n+1.0),f.x),
+                            lerp( hash(n+57.0), hash(n+58.0),f.x),f.y),
+                        lerp(lerp( hash(n+113.0), hash(n+114.0),f.x),
+                            lerp( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
+            
+            return (noise + 1) / 2;
+        }
+
+        float smoothstep( float a, float b, float x )
+        {
+            float t = clamp((x - a) / (b - a), 0, 1);
+            return t * t * (3 - 2 * t);
+        }
+
         void vert(inout appdata_full v, out Input o) {
-            float value = tex2Dlod(_DisplacementTexture, v.texcoord*7).x * _Amount;
-            v.vertex.xyz += v.normal.xyz * value * 0.3;
             UNITY_INITIALIZE_OUTPUT(Input, o);
-            o.displacementValue = value;
-
-            /*float4 vPos = mul(unity_ObjectToWorld, v.vertex);
-            float noise = PeriodicNoise(vPos.xz, _WorldWidthVertices);
-            noise *= _WorldHeight;
-            vPos.y += noise;
-            UNITY_INITIALIZE_OUTPUT(Input, o);
-            o.truePosition = vPos;
-
-            float3 vertInCamSpace = v.vertex - _WorldSpaceCameraPos;
-            float x_2 = vertInCamSpace.x * vertInCamSpace.x;
-            float z_2 = vertInCamSpace.z * vertInCamSpace.z;
-            float rad_2 = _Radius * _Radius;
-            float x_offset = sqrt(rad_2 - x_2) - _Radius;
-            float z_offset = sqrt(rad_2 - z_2) - _Radius;
-            float y_offset = x_offset + (z_offset - x_offset) * 0.5f;
-            v.vertex.y += y_offset;
-
-            o.vertex = mul(unity_WorldToObject, vPos);*/
-            //o.position = mul(unity_WorldToObject, vPos);
-            //o.color = v.color;
-            //o.uv_MainTex = v.texcoord.xy;
+            float noiseValue = noise(v.vertex * _NoiseScale + _NoiseOffset.xyz);
+            float4 displacement = float4(v.normal, 1) * float4(noiseValue, noiseValue, noiseValue, 1) * _DisplacementAmplitude;
+            o.vertex = UnityObjectToClipPos(v.vertex * _Radius + displacement);
+            o.normal = float4(normalize(v.normal), 1);
+            o.color = float4(noiseValue, 0, 0, 0);
         }
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+            float2 x = IN.vertex.zy / 1024.0;
+            float2 y = IN.vertex.xz / 1024.0;
+            float2 z = IN.vertex.xy / 1024.0;
+            if (IN.normal.x < 0) {
+                x.x = -x.x;
+            }
+            if (IN.normal.y < 0) {
+                y.x = -y.x;
+            }
+            if (IN.normal.z >= 0) {
+                z.x = -z.x;
+            }
+            x.y += 0.5;
+            z.x += 0.5;
+
+            float3 triW = abs(IN.normal);
+            triW = triW / (triW.x + triW.y + triW.z);
             
-            o.Albedo = lerp(c.rgb * c.a, float3(0, 0, 0), IN.displacementValue); //lerp based on the displacement
+            float3 albedoX = tex2D(_MainTex, x);
+            float3 albedoY = tex2D(_MainTex, y);
+            float3 albedoZ = tex2D(_MainTex, z);
+            
+            o.Albedo = float4(albedoX * triW.x + albedoY * triW.y + albedoZ * triW.z, 1.0);
 
-            o.Alpha = c.a;
-
-            /*float ARRAY_INDEX = 0;
-            fixed4 c = UNITY_SAMPLE_TEX2DARRAY(_DiffuseTextures, float3(IN.uv_MainTex, ARRAY_INDEX)) * _Color;
-            o.Albedo = c.rgb;
-            o.Metallic = _Metallic;
-            o.Smoothness = _Glossiness;
-            o.Alpha = c.a;*/
+            o.Alpha = 1;
         }
         ENDCG
     }

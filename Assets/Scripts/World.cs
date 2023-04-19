@@ -64,7 +64,7 @@ public class World : MonoBehaviour
 
         for (int i = 0; i < tris.Length / 3; ++i)
         {
-            Transform newChunk = Instantiate(chunkPrefab, Vector3.zero, Quaternion.identity, transform);
+            Transform newChunk = Instantiate(chunkPrefab, transform.position, Quaternion.identity, transform);
             newChunk.name = "(" + i + ")";
             Chunk chunk = newChunk.GetComponent<Chunk>();
             chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], radius, subdivisions);
