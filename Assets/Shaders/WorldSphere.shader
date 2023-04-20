@@ -1,7 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "Unlit/WorldSphere"
 {
     Properties
@@ -47,9 +43,10 @@ Shader "Unlit/WorldSphere"
             };
 
             sampler2D _SandTex, _GrassTex, _RockTex, _IceTex;
-            float4 _SandTex_ST;
             float _Radius, _NoiseScale, _DisplacementAmplitude, _TextureScale;
             float4 _NoiseOffset;
+
+            float pi = 3.141592653589793238462;
 
             float hash( float n )
 			{
@@ -116,7 +113,7 @@ Shader "Unlit/WorldSphere"
                 float3 albedoX;
                 float3 albedoY;
                 float3 albedoZ;
-                if (i.color.x < 0.65) {
+                if (i.color.x < 0.7) {
                     albedoX = tex2D(_SandTex, x).rgb;
                     albedoY = tex2D(_SandTex, y).rgb;
                     albedoZ = tex2D(_SandTex, z).rgb;
@@ -139,6 +136,16 @@ Shader "Unlit/WorldSphere"
 
                 fixed4 col = float4(albedoX * triW.x + albedoY * triW.y + albedoZ * triW.z, 1.0);
                 
+                /*float a2 = roughness * roughness;
+                float d = ((NdotH * a2 - NdotH) * NdotH + 1.0);
+                float D = a2 / (d * d * pi);
+                float k = roughness * roughness / 2.0;
+                float g_v = NdotV / (NdotV * (1.0 - k) + k);
+                float g_l = NdotL / (NdotL * (1.0 - k) + k);
+                float G = g_v * g_l;
+                float3 F = f0 + (float3(1.0, 1.0, 1.0) - f0) * pow(1 - 1DotH, 5.0);
+                col = D * G * F / (4.0 * NdotL * NdotV);*/
+
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;

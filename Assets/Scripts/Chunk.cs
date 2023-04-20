@@ -10,7 +10,6 @@ public class Chunk : MonoBehaviour
     private int subdivisions;
     private List<Vector3> vertices = new List<Vector3>();
     private List<int> triangles = new List<int>();
-    private List<Vector2> uvs = new List<Vector2>();
     private List<Vector3> normals = new List<Vector3>();
 
     public void Initialise(Vector3 firstPos, Vector3 secondPos, Vector3 thirdPos, int radius, int subdivisions)
@@ -41,9 +40,10 @@ public class Chunk : MonoBehaviour
         }
 
         Mesh mesh = new Mesh();
+        mesh.subMeshCount = 2;
         mesh.SetVertices(vertices.ToArray());
         mesh.SetTriangles(triangles.ToArray(), 0);
-        mesh.SetUVs(0, uvs.ToArray());
+        mesh.SetTriangles(triangles.ToArray(), 1);
         mesh.SetNormals(normals.ToArray());
         mesh.Optimize();
 
