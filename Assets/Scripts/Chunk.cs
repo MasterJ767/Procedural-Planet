@@ -6,15 +6,13 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class Chunk : MonoBehaviour
 {
-    private int radius;
     private int subdivisions;
     private List<Vector3> vertices = new List<Vector3>();
     private List<int> triangles = new List<int>();
     private List<Vector3> normals = new List<Vector3>();
 
-    public void Initialise(Vector3 firstPos, Vector3 secondPos, Vector3 thirdPos, int radius, int subdivisions)
+    public void Initialise(Vector3 firstPos, Vector3 secondPos, Vector3 thirdPos, int subdivisions)
     {
-        this.radius = radius;
         this.subdivisions = subdivisions;
 
         vertices.Add(firstPos);

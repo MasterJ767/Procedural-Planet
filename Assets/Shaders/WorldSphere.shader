@@ -46,8 +46,6 @@ Shader "Unlit/WorldSphere"
             float _Radius, _NoiseScale, _DisplacementAmplitude, _TextureScale;
             float4 _NoiseOffset;
 
-            float pi = 3.141592653589793238462;
-
             float hash( float n )
 			{
 			    return frac(sin(n)*43758.5453);
@@ -138,7 +136,7 @@ Shader "Unlit/WorldSphere"
                 
                 /*float a2 = roughness * roughness;
                 float d = ((NdotH * a2 - NdotH) * NdotH + 1.0);
-                float D = a2 / (d * d * pi);
+                float D = a2 / (d * d * UNITY_PI);
                 float k = roughness * roughness / 2.0;
                 float g_v = NdotV / (NdotV * (1.0 - k) + k);
                 float g_l = NdotL / (NdotL * (1.0 - k) + k);

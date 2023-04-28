@@ -117,7 +117,7 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DisplacementAmplitude: 1
+    - _DisplacementAmplitude: 3
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -125,18 +125,18 @@ Material:
     - _Lacunarity: 1
     - _Metallic: 0.5
     - _Mode: 0
-    - _NoiseScale: 4
+    - _NoiseScale: 6
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Persistence: 1
-    - _Radius: 1
+    - _Radius: 4
     - _Scale: 100
     - _Scale1: 27
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TextureScale: 0.1
+    - _TextureScale: 0.2
     - _UVSec: 0
     - _WorldHeight: 128
     - _WorldWidthInVertices: 400
