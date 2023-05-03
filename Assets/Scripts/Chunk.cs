@@ -45,7 +45,7 @@ public class Chunk : MonoBehaviour
         mesh.SetNormals(normals.ToArray());
         mesh.Optimize();
 
-        meshFilter.sharedMesh = mesh;
+        meshFilter.mesh = mesh;
     }
 
     public void Subdivide() {

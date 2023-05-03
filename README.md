@@ -4,7 +4,7 @@
 
 ## Built With
 
-- Unity 2021.3.22f1
+- Unity 2021.3.24f1
 - Visual Studio 2022
 
 ## License
