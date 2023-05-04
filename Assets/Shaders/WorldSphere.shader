@@ -2,15 +2,21 @@ Shader "Unlit/WorldSphere"
 {
     Properties
     {
+         [Header(World Generation)]
+        _Radius ("Radius", float) = 3.0
+        _NoiseScale ("Noise Scale", float) = 3.0
+        _NoiseOffset ("Noise Offset", vector) = (1,1,1,0)
+        _DisplacementAmplitude ("Displacement Amplitude", float) = 3.0
+
+         [Header(Texturing)]
+        _TextureScale ("Texture Scale", float) = 1024.0
+        _BlendRegion1 ("Blend Region 1", vector) = (0.67,0.72,0,0)
+        _BlendRegion2 ("Blend Region 2", vector) = (0.77,0.82,0,0)
+        _BlendRegion3 ("Blend Region 3", vector) = (0.87,0.92,0,0)
         _SandTex ("Sand Texture", 2D) = "white" {}
         _GrassTex ("Grass Texture", 2D) = "white" {}
         _RockTex ("Rock Texture", 2D) = "white" {}
-        _IceTex ("Ice Texture", 2D) = "white" {}
-        _Radius ("Radius", float) = 3.0
-        _NoiseScale ("Noise Scale", float) = 3.0
-        _NoiseOffset ("Noise Offset", vector) = (1,1,1)
-        _DisplacementAmplitude ("Displacement Amplitude", float) = 3.0
-        _TextureScale ("Texture Scale", float) = 1024.0
+        _IceTex ("Ice Texture", 2D) = "white" {}        
     }
     SubShader
     {
@@ -44,7 +50,7 @@ Shader "Unlit/WorldSphere"
 
             sampler2D _SandTex, _GrassTex, _RockTex, _IceTex;
             float _Radius, _NoiseScale, _DisplacementAmplitude, _TextureScale;
-            float4 _NoiseOffset;
+            float4 _NoiseOffset, _BlendRegion1, _BlendRegion2, _BlendRegion3;
 
             float hash( float n )
 			{
@@ -106,31 +112,31 @@ Shader "Unlit/WorldSphere"
                 float3 triW = abs(i.normal);
                 triW = triW / (triW.x + triW.y + triW.z);
 
-                float3 albedoX;
-                float3 albedoY;
-                float3 albedoZ;
-                if (i.color.x < 0.7) {
-                    albedoX = tex2D(_SandTex, x).rgb;
-                    albedoY = tex2D(_SandTex, y).rgb;
-                    albedoZ = tex2D(_SandTex, z).rgb;
-                }
-                else if (i.color.x < 0.8) {
-                    albedoX = tex2D(_GrassTex, x).rgb;
-                    albedoY = tex2D(_GrassTex, y).rgb;
-                    albedoZ = tex2D(_GrassTex, z).rgb;
-                }
-                else if (i.color.x < 0.9) {
-                    albedoX = tex2D(_RockTex, x).rgb;
-                    albedoY = tex2D(_RockTex, y).rgb;
-                    albedoZ = tex2D(_RockTex, z).rgb;
-                }
-                else {
-                    albedoX = tex2D(_IceTex, x).rgb;
-                    albedoY = tex2D(_IceTex, y).rgb;
-                    albedoZ = tex2D(_IceTex, z).rgb;
-                }
+                float3 sandX = tex2D(_SandTex, x).rgb;
+                float3 sandY = tex2D(_SandTex, y).rgb;
+                float3 sandZ = tex2D(_SandTex, z).rgb;
+                float4 sandColor = float4(sandX * triW.x + sandY * triW.y + sandZ * triW.z, 1.0);
 
-                fixed4 col = float4(albedoX * triW.x + albedoY * triW.y + albedoZ * triW.z, 1.0);
+                float3 grassX = tex2D(_GrassTex, x).rgb;
+                float3 grassY = tex2D(_GrassTex, y).rgb;
+                float3 grassZ = tex2D(_GrassTex, z).rgb;
+                float4 grassColor = float4(grassX * triW.x + grassY * triW.y + grassZ * triW.z, 1.0);
+
+                float3 rockX = tex2D(_RockTex, x).rgb;
+                float3 rockY = tex2D(_RockTex, y).rgb;
+                float3 rockZ = tex2D(_RockTex, z).rgb;
+                float4 rockColor = float4(rockX * triW.x + rockY * triW.y + rockZ * triW.z, 1.0);
+                
+                float3 iceX = tex2D(_IceTex, x).rgb;
+                float3 iceY = tex2D(_IceTex, y).rgb;
+                float3 iceZ = tex2D(_IceTex, z).rgb;
+                float4 iceColor = float4(iceX * triW.x + iceY * triW.y + iceZ * triW.z, 1.0);
+
+                float blendTime1 = smoothstep(_BlendRegion1.x, _BlendRegion1.y, i.color.x);
+                float blendTime2 = smoothstep(_BlendRegion2.x, _BlendRegion2.y, i.color.x);
+                float blendTime3 = smoothstep(_BlendRegion3.x, _BlendRegion3.y, i.color.x);
+
+                fixed4 col = lerp(lerp(lerp(sandColor, grassColor, blendTime1), rockColor, blendTime2), iceColor, blendTime3);
                 
                 /*float a2 = roughness * roughness;
                 float d = ((NdotH * a2 - NdotH) * NdotH + 1.0);
