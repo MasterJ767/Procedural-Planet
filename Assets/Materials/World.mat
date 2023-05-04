@@ -137,6 +137,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _TextureScale: 0.2
+    - _TriplanarSharpness: 1
     - _UVSec: 0
     - _WorldHeight: 128
     - _WorldWidthInVertices: 400
@@ -152,9 +153,14 @@ Material:
     - _value: 0
     m_Colors:
     - _BaseColour: {r: 1, g: 1, b: 1, a: 1}
+    - _BlendRegion1: {r: 0.65, g: 0.75, b: 0, a: 0}
+    - _BlendRegion2: {r: 0.75, g: 0.85, b: 0, a: 0}
+    - _BlendRegion3: {r: 0.85, g: 0.95, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _NoiseOffset: {r: 111, g: 22, b: 33, a: 0}
+    - _TextureRotations: {r: 16, g: 35, b: 42, a: 0}
+    - _TextureTilingOffset: {r: 1.25, g: 1.25, b: 0, a: 0}
     - _Tint: {r: 1, g: 1, b: 1, a: 0}
     - _TintColour: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
