@@ -129,7 +129,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Persistence: 1
-    - _Radius: 1
+    - _Radius: 4
     - _Scale: 100
     - _Scale1: 27
     - _Smoothness: 0.5

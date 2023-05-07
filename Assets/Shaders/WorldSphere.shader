@@ -67,10 +67,8 @@ Shader "Unlit/WorldSphere"
 			    f = f*f*(3.0-2.0*f);
 			    float n = p.x + p.y*57.0 + 113.0*p.z;
 
-			    float noise = lerp(lerp(lerp( hash(n+0.0), hash(n+1.0),f.x),
-			                   lerp( hash(n+57.0), hash(n+58.0),f.x),f.y),
-			               lerp(lerp( hash(n+113.0), hash(n+114.0),f.x),
-			                   lerp( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
+			    float noise = lerp( lerp(   lerp( hash(n+0.0), hash(n+1.0),f.x),    lerp( hash(n+57.0), hash(n+58.0),f.x),  f.y),
+			                        lerp(   lerp( hash(n+113.0), hash(n+114.0),f.x),    lerp( hash(n+170.0), hash(n+171.0),f.x),    f.y),   f.z);
                 
                 return (noise + 1) / 2;
 			}

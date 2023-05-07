@@ -7,6 +7,7 @@ public class World : MonoBehaviour
 {
     public int subdivisions;
     public Transform chunkPrefab;
+    public Material[] materials;
 
     private List<Chunk> chunks = new List<Chunk>();
 
@@ -66,7 +67,7 @@ public class World : MonoBehaviour
             Transform newChunk = Instantiate(chunkPrefab, transform.position, Quaternion.identity, transform);
             newChunk.name = "(" + i + ")";
             Chunk chunk = newChunk.GetComponent<Chunk>();
-            chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], subdivisions);
+            chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], subdivisions, materials);
             chunk.Render();
             chunks.Add(chunk);
         }

@@ -11,9 +11,11 @@ public class Chunk : MonoBehaviour
     private List<int> triangles = new List<int>();
     private List<Vector3> normals = new List<Vector3>();
 
-    public void Initialise(Vector3 firstPos, Vector3 secondPos, Vector3 thirdPos, int subdivisions)
+    public void Initialise(Vector3 firstPos, Vector3 secondPos, Vector3 thirdPos, int subdivisions, Material[] materials)
     {
         this.subdivisions = subdivisions;
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer.materials = materials;
 
         vertices.Add(firstPos);
         vertices.Add(secondPos);
@@ -26,7 +28,6 @@ public class Chunk : MonoBehaviour
     public void Render()
     {
         MeshFilter meshFilter = GetComponent<MeshFilter>();
-        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
 
         for (int i = 0; i < subdivisions; ++i) {
             Subdivide();
