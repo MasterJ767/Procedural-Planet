@@ -2,13 +2,22 @@ Shader "Unlit/WaterSphere"
 {
     Properties
     {
-        _WaterTex ("Texture", 2D) = "white" {}
+        [Header(World Generation)]
         _Radius ("Radius", float) = 3.0
-        _DisplacementAmplitude ("Displacement Amplitude", float) = 3.0
+        _Gravity ("Gravity", float) = 9.81
+        _Depth ("Depth", float) = 10
+        _Phase ("Phase", float) = 0
+        _Direction1 ("Direction 1", vector) = (0.1,0,0,0)
+        _Direction2 ("Direction 2", vector) = (0,0,0.1,0)
+        _Direction3 ("Direction 3", vector) = (0.05,0,0,0)
+        _Direction4 ("Direction 4", vector) = (0,0,0.05,0)
+        _Amplitudes ("Amplitudes", vector) = (1,2,3,4)
+        _TimeScales ("TimeScales", vector) = (1,2,3,4)
+        _NeighbourDistance ("Neighbour Distance", float) = 1
+        
+        [Header(Texturing)]
+        _WaterTex ("Texture", 2D) = "white" {}
         _TextureScale ("Texture Scale", float) = 1024.0
-        _Depth ("Depth", float) = 3.0
-        _Wavelength ("Wavelength", float) = 3.0
-        _Speed ("Speed", float) = 3.0
     }
     SubShader
     {
@@ -77,21 +86,74 @@ Shader "Unlit/WaterSphere"
             };
 
             sampler2D _WaterTex, _CameraDepthTexture;
-            float _Radius, _DisplacementAmplitude, _TextureScale, _Depth, _Wavelength, _Speed;
+            float _Radius, _TextureScale, _Gravity, _Depth, _Phase, _NeighbourDistance;
+            float4 _Direction1, _Direction2, _Direction3, _Direction4, _Amplitudes, _TimeScales;
+
+            float frequency( float3 direction, float gravity, float depth ) 
+            {
+                float magnitude = length(direction);
+                float a = tanh(depth * magnitude) * (gravity * magnitude);
+                return sqrt(a);
+            }
+
+            float theta( float3 direction, float3 position, float gravity, float depth, float time, float phase ) 
+            {
+                float a = (direction.x * position.x) + (direction.z * position.z);
+                float b = frequency(direction, gravity, depth) * time;
+                return (a - b) - phase;
+            }
+
+            float3 trochoidalWave( float3 direction, float3 position, float gravity, float depth, float time, float phase, float amplitude )
+            {
+                float t = theta(direction, position, gravity, depth, time, phase);
+                float magnitude = length(direction);
+                float a = (direction.x / magnitude);
+                float b = amplitude / tanh(magnitude * depth);
+                float c = a * b;
+                float x = -(sin(t) * c);
+                float y = cos(t) * amplitude;
+                float d = (direction.z / magnitude);
+                float e = d * b;
+                float z = -(sin(t) * e);
+                return float3(x, y, z);
+            }
+            
+            float3 trochoidalDisplacement( float3 position, float gravity, float depth, float phase ) 
+            {
+                float a = trochoidalWave(_Direction1, position, gravity, depth, _TimeScales.x * _Time.y, phase, _Amplitudes.x);
+                float b = trochoidalWave(_Direction2, position, gravity, depth, _TimeScales.y * _Time.y, phase, _Amplitudes.y);
+                float c = trochoidalWave(_Direction3, position, gravity, depth, _TimeScales.z * _Time.y, phase, _Amplitudes.z);
+                float d = trochoidalWave(_Direction4, position, gravity, depth, _TimeScales.w * _Time.y, phase, _Amplitudes.w);
+                return (a + b) + (c + d); 
+            }
+
+            float3 deriveNormal( float3 source, float3 neighbour1, float3 neighbour2 )
+            {
+                float a = normalize(neighbour1 - source);
+                float b = normalize(source - neighbour2);
+                return normalize(cross(a, b));
+            }
 
             v2f vert (appdata v)
             {
-                float k = 2 * UNITY_PI / _Wavelength;
-                float f = k * (v.vertex.y - _Speed * _Time.x);
-                float s = (sin(f) + 1) / 2;
-                float c = (cos(f) + 1) / 2;
-                float4 displacement = v.normal * lerp(lerp(0.65, 0.7, s), lerp(0.65, 0.7, c), 0.5) *_DisplacementAmplitude;
+                float4 worldPos = mul(unity_ObjectToWorld, v.vertex * _Radius);
+                float4 displacement = float4(trochoidalDisplacement(worldPos, _Gravity, _Depth, _Phase), 0);
+                worldPos += displacement;
                 v2f o;
-                o.objPos = v.vertex * _Radius + displacement;
+                o.objPos = mul(unity_WorldToObject, worldPos);
                 o.vertex = UnityObjectToClipPos(o.objPos);
                 //UNITY_TRANSFER_DEPTH(o.depth);
                 o.screenPos = ComputeScreenPos(o.vertex);
-                o.normal = normalize(v.normal);
+                float4 neighbour1 = worldPos + float4(0, 0, _NeighbourDistance, 0);
+                float4 neighbour1Displacement = float4(trochoidalDisplacement(neighbour1, _Gravity, _Depth, _Phase), 0);
+                neighbour1 += neighbour1Displacement;
+                float4 neighbour2 = worldPos + float4(_NeighbourDistance, 0, 0, 0);
+                float4 neighbour2Displacement = float4(trochoidalDisplacement(neighbour2, _Gravity, _Depth, _Phase), 0);
+                neighbour2 += neighbour2Displacement;
+                float4 n1obj = mul(unity_WorldToObject, neighbour1);
+                float4 n2obj = mul(unity_WorldToObject, neighbour2);
+                //o.normal = float4(deriveNormal(o.objPos, n1obj, n2obj), 0);
+                o.normal = normalize(v.vertex);
                 o.color = float4(o.vertex.z / v.vertex.w, 0, 0, 0);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
@@ -100,9 +162,9 @@ Shader "Unlit/WaterSphere"
             fixed4 frag (v2f i) : SV_Target
             {
                 //UNITY_OUTPUT_DEPTH(i.depth);
-                float2 screenSpaceUV = i.screenPos.xy / i.screenPos.w;
-                float depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, screenSpaceUV);
-                float linearDepth = Linear01Depth(depth);
+                //float2 screenSpaceUV = i.screenPos.xy / i.screenPos.w;
+                //float depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, screenSpaceUV);
+                //float linearDepth = Linear01Depth(depth);
 
                 float2 x = i.objPos.zy / _TextureScale;
                 float2 y = i.objPos.xz / _TextureScale;
