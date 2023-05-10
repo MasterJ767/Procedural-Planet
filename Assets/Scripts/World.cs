@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
+    public SphereType sphereType;
     public int subdivisions;
     public Transform chunkPrefab;
     public Material[] materials;
@@ -13,10 +14,19 @@ public class World : MonoBehaviour
 
     private void Start()
     {
-        CreateWorld();
+        switch(sphereType) {
+            case SphereType.Icosohedron:
+                CreateIcosohedronWorld();
+                break;
+            case SphereType.Cube:
+                CreateCubeWorld();
+                break;
+            default:
+                break;
+        }
     }
 
-    private void CreateWorld()
+    private void CreateIcosohedronWorld()
     {
         float phi = (1f + Mathf.Sqrt(5f)) * 0.5f;
         float a = 1f;
@@ -72,4 +82,55 @@ public class World : MonoBehaviour
             chunks.Add(chunk);
         }
     }
+
+    private void CreateCubeWorld() 
+    {
+        float a = 0.5f;
+
+        Vector3[] verts = new[]
+        {
+            new Vector3(-a, -a, -a),
+            new Vector3(-a, a, -a),
+            new Vector3(a, a, -a),
+            new Vector3(a, -a, -a),
+            new Vector3(a, -a, a),
+            new Vector3(a, a, a),
+            new Vector3(-a, a, a),
+            new Vector3(-a, -a, a)
+        };
+
+        int[] tris = new []
+        {
+            0, 1, 3,
+            3, 1, 2,
+            5, 6, 4,
+            4, 6, 7,
+            6, 1, 7,
+            7, 1, 0,
+            2, 5, 3,
+            3, 5, 4,
+            0, 3, 7,
+            7, 3, 4,
+            6, 5, 1,
+            1, 5, 2
+        };
+
+        for (int i = 0; i < tris.Length / 3; ++i) 
+        {
+            Transform newChunk = Instantiate(chunkPrefab, transform.position, Quaternion.identity, transform);
+            newChunk.name = "(" + i + ")";
+            Chunk chunk = newChunk.GetComponent<Chunk>();
+            chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], subdivisions, materials);
+            chunk.Render();
+            chunks.Add(chunk);
+        }
+    }
+}
+
+[Serializable]
+public enum SphereType
+{
+    None,
+    Icosohedron,
+    Cube
 }

@@ -218,7 +218,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &114712264
 GameObject:
@@ -249,6 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccf9fd70fdc15c04eb626fb7684035e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sphereType: 1
   subdivisions: 6
   chunkPrefab: {fileID: 4406896918603649197, guid: 9c6467cb9a5702949a59da64c045c018, type: 3}
   materials:
@@ -268,6 +269,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &364252282
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 364252284}
+  - component: {fileID: 364252283}
+  m_Layer: 0
+  m_Name: World (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &364252283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364252282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf9fd70fdc15c04eb626fb7684035e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sphereType: 2
+  subdivisions: 6
+  chunkPrefab: {fileID: 4406896918603649197, guid: 9c6467cb9a5702949a59da64c045c018, type: 3}
+  materials:
+  - {fileID: 2100000, guid: cf95c0b01d2251c4bb14670da85f1ffb, type: 2}
+  - {fileID: 2100000, guid: 7c76352f53364084e9f3a09e847d00a5, type: 2}
+--- !u!4 &364252284
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364252282}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 5000}
+  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519854942
 GameObject:
@@ -360,6 +411,56 @@ Transform:
   m_GameObject: {fileID: 519854942}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1500, y: 1, z: 750}
+  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &576176014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 576176016}
+  - component: {fileID: 576176015}
+  m_Layer: 0
+  m_Name: World (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &576176015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576176014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf9fd70fdc15c04eb626fb7684035e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sphereType: 2
+  subdivisions: 6
+  chunkPrefab: {fileID: 4406896918603649197, guid: 9c6467cb9a5702949a59da64c045c018, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 26bc9e98c330f9d4a839939033f51761, type: 2}
+  - {fileID: 2100000, guid: 0c1434627bdc45946a4dcb89504e4012, type: 2}
+--- !u!4 &576176016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576176014}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: -2000}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -653,7 +754,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1841972459
 GameObject:
@@ -684,6 +785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccf9fd70fdc15c04eb626fb7684035e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sphereType: 1
   subdivisions: 6
   chunkPrefab: {fileID: 4406896918603649197, guid: 9c6467cb9a5702949a59da64c045c018, type: 3}
   materials:
@@ -799,5 +901,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
