@@ -105,7 +105,7 @@ Shader "Unlit/WorldSphere"
                 return float2(sin(uv.y*+offset) * 0.5 + 0.5, cos(uv.x*offset) * 0.5 + 0.5);
             }
 
-            void voronoi( float2 uv, float angleOffset, float cellDensity, out float Cells )
+            float voronoi( float2 uv, float angleOffset, float cellDensity)
             {
                 float2 g = floor(uv * cellDensity);
                 float2 f = frac(uv * cellDensity);
@@ -123,10 +123,11 @@ Shader "Unlit/WorldSphere"
                         {
                             res = float3(d, offset.x, offset.y);
                             //Out = res.x;
-                            Cells = res.y;
+                            return res.y;
                         }
                     }
                 }
+                return 0;
             }
 
             v2f vert (appdata v)
@@ -161,31 +162,28 @@ Shader "Unlit/WorldSphere"
                 float2 y3 = i.objPos.xz * tiling + offset3;
                 float2 z3 = i.objPos.xy * tiling + offset3;
 
-                float xRot = 0;
-                float yRot = 0;
-                float zRot = 0;
                 float2 center = float2(0.5, 0.5);
 
-                voronoi(x1, 2, _TextureRotations.x, xRot);
-                voronoi(y1, 2, _TextureRotations.x, yRot);
-                voronoi(z1, 2, _TextureRotations.x, zRot);
-                x1 = rotateUVs(x1, center, xRot);
-                y1 = rotateUVs(y1, center, yRot);
-                z1 = rotateUVs(z1, center, zRot);
+                float xRot1 = voronoi(x1, 2, _TextureRotations.x);
+                float yRot1 = voronoi(y1, 2, _TextureRotations.x);
+                float zRot1 = voronoi(z1, 2, _TextureRotations.x);
+                x1 = rotateUVs(x1, center, xRot1);
+                y1 = rotateUVs(y1, center, yRot1);
+                z1 = rotateUVs(z1, center, zRot1);
 
-                voronoi(x2, 2, _TextureRotations.y, xRot);
-                voronoi(y2, 2, _TextureRotations.y, yRot);
-                voronoi(z2, 2, _TextureRotations.y, zRot);
-                x2 = rotateUVs(x2, center, xRot);
-                y2 = rotateUVs(y2, center, yRot);
-                z2 = rotateUVs(z2, center, zRot);
+                float xRot2 = voronoi(x2, 2, _TextureRotations.y);
+                float yRot2 = voronoi(y2, 2, _TextureRotations.y);
+                float zRot2 = voronoi(z2, 2, _TextureRotations.y);
+                x2 = rotateUVs(x2, center, xRot2);
+                y2 = rotateUVs(y2, center, yRot2);
+                z2 = rotateUVs(z2, center, zRot2);
 
-                voronoi(x3, 2, _TextureRotations.z, xRot);
-                voronoi(y3, 2, _TextureRotations.z, yRot);
-                voronoi(z3, 2, _TextureRotations.z, zRot);
-                x3 = rotateUVs(x3, center, xRot);
-                y3 = rotateUVs(y3, center, yRot);
-                z3 = rotateUVs(z3, center, zRot);
+                float xRot3 = voronoi(x3, 2, _TextureRotations.z);
+                float yRot3 = voronoi(y3, 2, _TextureRotations.z);
+                float zRot3 = voronoi(z3, 2, _TextureRotations.z);
+                x3 = rotateUVs(x3, center, xRot3);
+                y3 = rotateUVs(y3, center, yRot3);
+                z3 = rotateUVs(z3, center, zRot3);
 
                 float3 triW = abs(i.normal) * _TriplanarSharpness;
                 triW = triW / (triW.x + triW.y + triW.z);

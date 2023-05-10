@@ -125,6 +125,7 @@ Material:
     - _Lacunarity: 1
     - _Metallic: 0.5
     - _Mode: 0
+    - _NeighbourDistance: 1
     - _NoiseScale: 6
     - _OcclusionStrength: 1
     - _Parallax: 0.02

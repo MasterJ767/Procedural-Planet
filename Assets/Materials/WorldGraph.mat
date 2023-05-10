@@ -97,10 +97,12 @@ Material:
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
+    - _NeighbourDistance: 0
     - _NoiseScale: 6
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Radius: 4
+    - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -119,7 +121,7 @@ Material:
     - _PolarTint: {r: 0.73135453, g: 0.88731444, b: 0.8962264, a: 1}
     - _TextureOffset: {r: 0, g: 0, b: 0, a: 0}
     - _TextureRotations: {r: 16, g: 35, b: 40, a: 0}
-    - _TextureTiling: {r: 1, g: 1, b: 0, a: 0}
+    - _TextureTiling: {r: 1.25, g: 1.25, b: 0, a: 0}
     - _TintBlendRegion1: {r: 0.19, g: 0.27, b: 0, a: 0}
     - _TintBlendRegion2: {r: 0.62, g: 0.7, b: 0, a: 0}
   m_BuildTextureStacks: []

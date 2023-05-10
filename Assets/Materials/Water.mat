@@ -74,16 +74,17 @@ Material:
     - _Gravity: 9.81
     - _Metallic: 0
     - _Mode: 0
-    - _NeighbourDistance: 1
+    - _NeighbourDistance: 25
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Phase: 0
-    - _Radius: 5.96
+    - _Radius: 5.95
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _Speed: 3
     - _SrcBlend: 1
     - _TextureScale: 0.1
+    - _TriplanarSharpness: 1
     - _UVSec: 0
     - _Wavelength: 1
     - _ZWrite: 1
@@ -95,5 +96,12 @@ Material:
     - _Direction3: {r: 0.05, g: 0, b: 0.01, a: 0}
     - _Direction4: {r: 0.01, g: 0, b: 0.05, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EquatorialTint: {r: 0.26, g: 0.84, b: 0.93, a: 1}
+    - _MiddleTint: {r: 0.64760596, g: 0.7430581, b: 0.9339623, a: 1}
+    - _PolarTint: {r: 0.55998576, g: 0.55998576, b: 0.9811321, a: 1}
+    - _TextureRotations: {r: 16, g: 35, b: 40, a: 0}
+    - _TextureTilingOffset: {r: 1.25, g: 1.25, b: 0, a: 0}
     - _TimeScales: {r: 1, g: 2, b: 3, a: 4}
+    - _TintBlendRegion1: {r: 0.19, g: 0.27, b: 0, a: 0}
+    - _TintBlendRegion2: {r: 0.62, g: 0.7, b: 0, a: 0}
   m_BuildTextureStacks: []
