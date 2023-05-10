@@ -25,40 +25,6 @@ Shader "Unlit/WaterSphere"
         Blend SrcAlpha OneMinusSrcAlpha
         LOD 100
 
-        Pass 
-        {
-            Name "ShadowCaster"
-            Tags { "LightMode" = "ShadowCaster" }
-            
-            Fog {Mode Off}
-            ZWrite On ZTest LEqual Cull Off
-            Offset 1, 1
-
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #pragma multi_compile_shadowcaster
-            #include "UnityCG.cginc"
-
-            struct v2f 
-            { 
-                V2F_SHADOW_CASTER;
-            };
-
-            v2f vert( appdata_base v )
-            {
-                v2f o;
-                TRANSFER_SHADOW_CASTER(o)
-                return o;
-            }
-
-            float4 frag( v2f i ) : SV_Target
-            {
-                SHADOW_CASTER_FRAGMENT(i)
-            }
-            ENDCG
-        }
-
         Pass
         {
             CGPROGRAM
@@ -185,7 +151,7 @@ Shader "Unlit/WaterSphere"
                 float3 albedoY = tex2D(_WaterTex, y).rgb;
                 float3 albedoZ = tex2D(_WaterTex, z).rgb;
 
-                fixed4 col = float4((albedoX * triW.x + albedoY * triW.y + albedoZ * triW.z), 0.8);
+                fixed4 col = float4((albedoX * triW.x + albedoY * triW.y + albedoZ * triW.z), 1);
                 //fixed4 col = float4(difference, difference, difference, 1.0);
                 //fixed4 col = float4(depth, 0.0, 0.0, 1.0);
                 //fixed4 col = float4(i.objPos.x, i.objPos.y, i.objPos.z, 0.1);

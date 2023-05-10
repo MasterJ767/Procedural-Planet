@@ -96,7 +96,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Phase: 0
-    - _Radius: 5
+    - _Radius: 5.96
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

@@ -15,10 +15,15 @@ Shader "Unlit/WorldSphere"
         _BlendRegion1 ("Blend Region 1", vector) = (0.67,0.72,0,0)
         _BlendRegion2 ("Blend Region 2", vector) = (0.77,0.82,0,0)
         _BlendRegion3 ("Blend Region 3", vector) = (0.87,0.92,0,0)
-        _SandTex ("Sand Texture", 2D) = "white" {}
-        _GrassTex ("Grass Texture", 2D) = "white" {}
-        _RockTex ("Rock Texture", 2D) = "white" {}
-        _IceTex ("Ice Texture", 2D) = "white" {}        
+        [NoScaleOffset] _SandTex ("Sand Texture", 2D) = "white" {}
+        [NoScaleOffset] _GrassTex ("Grass Texture", 2D) = "white" {}
+        [NoScaleOffset] _RockTex ("Rock Texture", 2D) = "white" {}
+        [NoScaleOffset] _IceTex ("Ice Texture", 2D) = "white" {}
+        _TintBlendRegion1 ("Tint Blend Region 1", vector) = (0.19,0.27,0,0)
+        _TintBlendRegion2 ("Tint Blend Region 2", vector) = (0.62,0.70,0,0)
+        _EquatorialTint ("Equatorial Tint", color) = (0.77,0.58,0.17,1)
+        _MiddleTint ("Middle Tint", color) = (1,1,1,1)
+        _PolarTint ("Polar Tint", color) = (0.83,0.88,0.89,1)        
     }
     SubShader
     {
@@ -52,7 +57,7 @@ Shader "Unlit/WorldSphere"
 
             sampler2D _SandTex, _GrassTex, _RockTex, _IceTex;
             float _Radius, _NoiseScale, _DisplacementAmplitude, _TextureScale, _TriplanarSharpness;
-            float4 _NoiseOffset, _BlendRegion1, _BlendRegion2, _BlendRegion3, _TextureTilingOffset, _TextureRotations;
+            float4 _NoiseOffset, _BlendRegion1, _BlendRegion2, _BlendRegion3, _TextureTilingOffset, _TextureRotations, _TintBlendRegion1, _TintBlendRegion2, _EquatorialTint, _MiddleTint, _PolarTint;
 
             float hash( float n )
 			{
@@ -257,7 +262,16 @@ Shader "Unlit/WorldSphere"
                 float blendTime2 = smoothstep(_BlendRegion2.x, _BlendRegion2.y, i.color.x);
                 float blendTime3 = smoothstep(_BlendRegion3.x, _BlendRegion3.y, i.color.x);
 
-                fixed4 col = lerp(lerp(lerp(sandColor, grassColor, blendTime1), rockColor, blendTime2), iceColor, blendTime3);
+                fixed4 texCol = lerp(lerp(lerp(sandColor, grassColor, blendTime1), rockColor, blendTime2), iceColor, blendTime3);
+
+                float yDisplacement = abs(i.objPos.y) / (_Radius + _DisplacementAmplitude);
+
+                float tintTime1 = smoothstep(_TintBlendRegion1.x, _TintBlendRegion1.y, yDisplacement);
+                float tintTime2 = smoothstep(_TintBlendRegion2.x, _TintBlendRegion2.y, yDisplacement);
+
+                fixed4 tintCol = lerp(lerp(_EquatorialTint, _MiddleTint, tintTime1), _PolarTint, tintTime2);
+
+                fixed4 col = texCol * tintCol;
                 
                 /*float a2 = roughness * roughness;
                 float d = ((NdotH * a2 - NdotH) * NdotH + 1.0);
