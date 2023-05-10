@@ -96,7 +96,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Phase: 0
-    - _Radius: 5.96
+    - _Radius: 5.95
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -118,6 +118,6 @@ Material:
     - _TextureRotations: {r: 16, g: 35, b: 40, a: 0}
     - _TextureTiling: {r: 1.25, g: 1.25, b: 0, a: 0}
     - _TimeScales: {r: 1, g: 2, b: 3, a: 4}
-    - _TintBlendRegion1: {r: 0.19, g: 0.27, b: 0, a: 0}
-    - _TintBlendRegion2: {r: 0.62, g: 0.7, b: 0, a: 0}
+    - _TintBlendRegion1: {r: 0.15, g: 0.31, b: 0, a: 0}
+    - _TintBlendRegion2: {r: 0.58, g: 0.74, b: 0, a: 0}
   m_BuildTextureStacks: []

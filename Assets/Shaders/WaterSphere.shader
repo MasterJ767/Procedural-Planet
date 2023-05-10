@@ -97,7 +97,7 @@ Shader "Unlit/WaterSphere"
                 float b = trochoidalWave(_Direction2, position, gravity, depth, _TimeScales.y * _Time.y, phase, _Amplitudes.y);
                 float c = trochoidalWave(_Direction3, position, gravity, depth, _TimeScales.z * _Time.y, phase, _Amplitudes.z);
                 float d = trochoidalWave(_Direction4, position, gravity, depth, _TimeScales.w * _Time.y, phase, _Amplitudes.w);
-                return (a + b) + (c + d) + position; 
+                return (a + b) + (c + d); 
             }
 
             float smoothstep( float a, float b, float x )
@@ -162,16 +162,16 @@ Shader "Unlit/WaterSphere"
             v2f vert (appdata v)
             {
                 float4 worldPos = mul(unity_ObjectToWorld, v.vertex * _Radius);
-                float4 worldPosWave = float4(trochoidalDisplacement(worldPos, _Gravity, _Depth, _Phase), 0);
+                float4 worldPosWave = float4(trochoidalDisplacement(worldPos, _Gravity, _Depth, _Phase), 0) + worldPos;
                 v2f o;
                 o.objPos = mul(unity_WorldToObject, worldPosWave);
                 o.vertex = UnityObjectToClipPos(o.objPos);
                 o.screenPos = ComputeScreenPos(o.vertex);
                 float4 n1 = worldPos + float4(0, 0, _NeighbourDistance, 0);
-                float4 n1Wave = float4(trochoidalDisplacement(n1, _Gravity, _Depth, _Phase), 0);
+                float4 n1Wave = float4(trochoidalDisplacement(n1, _Gravity, _Depth, _Phase), 0) + n1;
                 float4 n1obj = mul(unity_WorldToObject, n1Wave);
                 float4 n2 = worldPos + float4(_NeighbourDistance, 0, 0, 0);
-                float4 n2Wave = float4(trochoidalDisplacement(n2, _Gravity, _Depth, _Phase), 0);
+                float4 n2Wave = float4(trochoidalDisplacement(n2, _Gravity, _Depth, _Phase), 0) + n2;
                 float4 n2obj = mul(unity_WorldToObject, n2Wave);
                 //o.normal = float4(deriveNormal(o.objPos, n1obj, n2obj), 0);
                 o.normal = normalize(v.vertex);
