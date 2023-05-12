@@ -77,8 +77,8 @@ Material:
     m_Floats:
     - _Amplitude1: 1
     - _Amplitude2: 1
-    - _Amplitude3: 2
-    - _Amplitude4: 2
+    - _Amplitude3: 1
+    - _Amplitude4: 1
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
     - _BumpScale: 1
