@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5834100343056750652
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 639247ca83abc874e893eb93af2b5e44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 0
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WaterGraph
-  m_Shader: {fileID: -6465566751694194690, guid: a1e81387eb4412d46889bc943cdf4193, type: 3}
+  m_Name: Lava
+  m_Shader: {fileID: 4800000, guid: a82a68a814cc19342bb197ca32e0040e, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -53,20 +40,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _EmissionTex:
-        m_Texture: {fileID: 2800000, guid: 92de9fbb5fd25fe40a72ae7751d83b52, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NormalTex:
-        m_Texture: {fileID: 2800000, guid: f805e88d3eaf0f046ac4ed03de5c7c3e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -78,21 +57,16 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _WaterTex:
-        m_Texture: {fileID: 2800000, guid: aa701e5be2dbcd24aad4fb9c3ca284da, type: 3}
+        m_Texture: {fileID: 2800000, guid: cc2d009b31ce2134a9438a34a78632a0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Amplitude1: 1
-    - _Amplitude2: 1
-    - _Amplitude3: 1
-    - _Amplitude4: 1
-    - _BUILTIN_QueueControl: 0
-    - _BUILTIN_QueueOffset: 0
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _Depth: 10
     - _DetailNormalMapScale: 1
+    - _DisplacementAmplitude: 3
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -105,27 +79,29 @@ Material:
     - _Parallax: 0.02
     - _Phase: 0
     - _Radius: 5.95
-    - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _Speed: 3
     - _SrcBlend: 1
+    - _TextureScale: 0.1
     - _TriplanarSharpness: 1
     - _UVSec: 0
+    - _Wavelength: 1
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.12459949, g: 0.47715774, b: 0.754717, a: 1}
+    - _Amplitudes: {r: 1, g: 1, b: 2, a: 2}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Direction1: {r: 0.1, g: 0, b: 0.21, a: 0}
     - _Direction2: {r: 0.21, g: 0, b: 0.1, a: 0}
     - _Direction3: {r: 0.05, g: 0, b: 0.01, a: 0}
-    - _Direction_4: {r: 0.01, g: 0, b: 0.05, a: 0}
+    - _Direction4: {r: 0.01, g: 0, b: 0.05, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _EquatorialTint: {r: 0.25999996, g: 0.8399999, b: 0.93, a: 1}
-    - _MiddleTint: {r: 0.64760596, g: 0.7430581, b: 0.9339623, a: 1}
-    - _Polar_Tint: {r: 0.55998576, g: 0.55998576, b: 0.9811321, a: 1}
-    - _TextureOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _EquatorialTint: {r: 0.93, g: 0.25999996, b: 0.25999996, a: 1}
+    - _MiddleTint: {r: 0.92941177, g: 0.4071718, b: 0.25882348, a: 1}
+    - _PolarTint: {r: 0.92941177, g: 0.82537115, b: 0.25882348, a: 1}
     - _TextureRotations: {r: 0, g: 0, b: 0, a: 0}
-    - _TextureTiling: {r: 1.25, g: 1.25, b: 0, a: 0}
-    - _TimeScales: {r: 1, g: 2, b: 3, a: 4}
+    - _TextureTilingOffset: {r: 1.25, g: 1.25, b: 0, a: 0}
+    - _TimeScales: {r: 1, g: 1, b: 1, a: 1}
     - _TintBlendRegion1: {r: 0.15, g: 0.31, b: 0, a: 0}
     - _TintBlendRegion2: {r: 0.58, g: 0.74, b: 0, a: 0}
   m_BuildTextureStacks: []
