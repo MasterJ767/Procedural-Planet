@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Shape.unity
     guid: 4902f3c91083e4a45a97da8781c4569b
+  - enabled: 1
+    path: Assets/Scenes/Plane.unity
+    guid: 597c92554287cc7418080ec6b98472f3
   m_configObjects: {}

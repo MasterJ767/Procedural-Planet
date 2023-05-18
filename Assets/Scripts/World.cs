@@ -29,6 +29,9 @@ public class World : MonoBehaviour
             case SphereType.UV:
                 CreateUVWorld();
                 break;
+            case SphereType.Plane:
+                CreatePlaneWorld();
+                break;
             default:
                 break;
         }
@@ -85,7 +88,7 @@ public class World : MonoBehaviour
             Transform newChunk = Instantiate(chunkPrefab, transform.position, Quaternion.identity, transform);
             newChunk.name = "(" + i + ")";
             Chunk chunk = newChunk.GetComponent<Chunk>();
-            chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], subdivisions, materials);
+            chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], subdivisions, materials, true);
             chunk.Render();
             chunks.Add(chunk);
         }
@@ -128,7 +131,7 @@ public class World : MonoBehaviour
             Transform newChunk = Instantiate(chunkPrefab, transform.position, Quaternion.identity, transform);
             newChunk.name = "(" + i + ")";
             Chunk chunk = newChunk.GetComponent<Chunk>();
-            chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], subdivisions, materials);
+            chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], subdivisions, materials, true);
             chunk.Render();
             chunks.Add(chunk);
         }
@@ -153,6 +156,46 @@ public class World : MonoBehaviour
         radial.Render();
         uSphere = radial;
     }
+
+    private void CreatePlaneWorld()
+    {
+        float a = 1f;
+
+        Vector3[] verts = new[]
+        {
+            new Vector3(-a, 0, -a),
+            new Vector3(0, 0, -a),
+            new Vector3(a, 0, -a),
+            new Vector3(-a, 0, 0),
+            new Vector3(0, 0, 0),
+            new Vector3(a, 0, 0),
+            new Vector3(-a, 0, a),
+            new Vector3(0, 0, a),
+            new Vector3(a, 0, a),
+        };
+
+        int[] tris = new []
+        {
+            0, 3, 1,
+            1, 3, 4,
+            1, 4, 2,
+            2, 4, 5,
+            3, 6, 4,
+            4, 6, 7,
+            4, 7, 5,
+            5, 7, 8
+        };
+
+        for (int i = 0; i < tris.Length / 3; ++i) 
+        {
+            Transform newChunk = Instantiate(chunkPrefab, transform.position, Quaternion.identity, transform);
+            newChunk.name = "(" + i + ")";
+            Chunk chunk = newChunk.GetComponent<Chunk>();
+            chunk.Initialise(verts[tris[i * 3]], verts[tris[(i * 3) + 1]], verts[tris[(i * 3) + 2]], subdivisions, materials, false);
+            chunk.Render();
+            chunks.Add(chunk);
+        }
+    }
 }
 
 [Serializable]
@@ -162,5 +205,6 @@ public enum SphereType
     Icosahedron,
     Cube,
     Fibonacci,
-    UV
+    UV,
+    Plane
 }

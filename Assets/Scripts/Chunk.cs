@@ -7,13 +7,15 @@ using UnityEngine;
 public class Chunk : MonoBehaviour
 {
     private int subdivisions;
+    private bool spherise;
     private List<Vector3> vertices = new List<Vector3>();
     private List<int> triangles = new List<int>();
     private List<Vector3> normals = new List<Vector3>();
 
-    public void Initialise(Vector3 firstPos, Vector3 secondPos, Vector3 thirdPos, int subdivisions, Material[] materials)
+    public void Initialise(Vector3 firstPos, Vector3 secondPos, Vector3 thirdPos, int subdivisions, Material[] materials, bool spherise)
     {
         this.subdivisions = subdivisions;
+        this.spherise = spherise;
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.materials = materials;
 
@@ -34,8 +36,14 @@ public class Chunk : MonoBehaviour
         }
 
         for (int j = 0; j < vertices.Count; ++j) {
-            normals.Add(vertices[j].normalized);
-            vertices[j] = vertices[j].normalized; 
+            if (spherise) {
+                normals.Add(vertices[j].normalized);
+                vertices[j] = vertices[j].normalized; 
+            }
+            else 
+            {
+                normals.Add(Vector3.up);
+            }
         }
 
         Mesh mesh = new Mesh();
