@@ -105,8 +105,8 @@ public class Fibonacci : MonoBehaviour
 		    maxy = Mathf.Max(maxx, vertex.y);
         }
 
-        float dx = (maxx - minx) * 0.1f;
-		float dy = (maxy - miny) * 0.1f;
+        float dx = (maxx - minx) * (1000 / Mathf.Pow(10, DigitCount(points)));
+		float dy = (maxy - miny) * (1000 / Mathf.Pow(10, DigitCount(points)));
 
         Vector3 v1 = new Vector3(minx - dx, miny - dy * 3);
 		Vector3 v2 = new Vector3(minx - dx, maxy + dy);
@@ -199,6 +199,35 @@ public class Fibonacci : MonoBehaviour
 
     protected float GetWinding(Vector3 a, Vector3 b, Vector3 c) {
         return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+    }
+
+    protected int DigitCount(int n)
+    {
+        if (n >= 0)
+        {
+            if (n < 10) return 1;
+            if (n < 100) return 2;
+            if (n < 1000) return 3;
+            if (n < 10000) return 4;
+            if (n < 100000) return 5;
+            if (n < 1000000) return 6;
+            if (n < 10000000) return 7;
+            if (n < 100000000) return 8;
+            if (n < 1000000000) return 9;
+            return 10;
+        }
+        else 
+        {
+            if (n > -10) return 2;
+            if (n > -100) return 3;
+            if (n > -1000) return 4;
+            if (n > -10000) return 5;
+            if (n > -100000) return 6;
+            if (n > -1000000) return 7;
+            if (n > -10000000) return 8;
+            if (n > -100000000) return 9;
+            return 10;
+        }
     }
 }
 
