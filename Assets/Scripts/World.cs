@@ -11,7 +11,8 @@ public class World : MonoBehaviour
     public Material[] materials;
 
     private List<Chunk> chunks = new List<Chunk>();
-    private Fibonacci sphere;
+    private Fibonacci fSphere;
+    private Radial uSphere;
 
     private void Start()
     {
@@ -24,6 +25,9 @@ public class World : MonoBehaviour
                 break;
             case SphereType.Fibonacci:
                 CreateFibonacciWorld();
+                break;
+            case SphereType.UV:
+                CreateUVWorld();
                 break;
             default:
                 break;
@@ -137,7 +141,17 @@ public class World : MonoBehaviour
         Fibonacci fibonacci = world.GetComponent<Fibonacci>();
         fibonacci.Initialise(subdivisions, materials);
         fibonacci.Render();
-        sphere = fibonacci;
+        fSphere = fibonacci;
+    }
+
+    private void CreateUVWorld()
+    {
+        Transform world = Instantiate(chunkPrefab, transform.position, Quaternion.identity, transform);
+        world.name = "(" + 0 + ")";
+        Radial radial = world.GetComponent<Radial>();
+        radial.Initialise(subdivisions, subdivisions, materials);
+        radial.Render();
+        uSphere = radial;
     }
 }
 
@@ -147,5 +161,6 @@ public enum SphereType
     None,
     Icosohedron,
     Cube,
-    Fibonacci
+    Fibonacci,
+    UV
 }

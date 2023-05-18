@@ -55,7 +55,7 @@ public class FibonacciDebug : Fibonacci
         meshFilter.mesh = mesh;
     }
 
-    public override void Triangulate()
+    protected override void Triangulate()
     {
         int value = Mathf.Min(increment, vertices.Count);
         vertices = vertices.Take(increment).ToList();

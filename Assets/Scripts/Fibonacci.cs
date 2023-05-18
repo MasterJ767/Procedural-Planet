@@ -43,7 +43,7 @@ public class Fibonacci : MonoBehaviour
         meshFilter.mesh = mesh;
     }
 
-    public void Generate() 
+    protected void Generate() 
     {
         float phi = Mathf.PI * (3f - Mathf.Sqrt(5f));
         for (int i = 0; i < points; ++i) 
@@ -61,7 +61,7 @@ public class Fibonacci : MonoBehaviour
         }
     }
 
-    public virtual void Triangulate()
+    protected virtual void Triangulate()
     {
         StereographicProjection();
 
