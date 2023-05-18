@@ -11,7 +11,7 @@ public class World : MonoBehaviour
     public Material[] materials;
 
     private List<Chunk> chunks = new List<Chunk>();
-    private Fibonnacci sphere;
+    private Fibonacci sphere;
 
     private void Start()
     {
@@ -134,10 +134,10 @@ public class World : MonoBehaviour
     {
         Transform world = Instantiate(chunkPrefab, transform.position, Quaternion.identity, transform);
         world.name = "(" + 0 + ")";
-        Fibonnacci fibonnacci = world.GetComponent<Fibonnacci>();
-        fibonnacci.Initialise(subdivisions, materials);
-        fibonnacci.Render();
-        sphere = fibonnacci;
+        Fibonacci fibonacci = world.GetComponent<Fibonacci>();
+        fibonacci.Initialise(subdivisions, materials);
+        fibonacci.Render();
+        sphere = fibonacci;
     }
 }
 
