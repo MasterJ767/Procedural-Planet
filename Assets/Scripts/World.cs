@@ -17,8 +17,8 @@ public class World : MonoBehaviour
     private void Start()
     {
         switch(sphereType) {
-            case SphereType.Icosohedron:
-                CreateIcosohedronWorld();
+            case SphereType.Icosahedron:
+                CreateIcosahedronWorld();
                 break;
             case SphereType.Cube:
                 CreateCubeWorld();
@@ -34,7 +34,7 @@ public class World : MonoBehaviour
         }
     }
 
-    private void CreateIcosohedronWorld()
+    private void CreateIcosahedronWorld()
     {
         float phi = (1f + Mathf.Sqrt(5f)) * 0.5f;
         float a = 1f;
@@ -159,7 +159,7 @@ public class World : MonoBehaviour
 public enum SphereType
 {
     None,
-    Icosohedron,
+    Icosahedron,
     Cube,
     Fibonacci,
     UV
