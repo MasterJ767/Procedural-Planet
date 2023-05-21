@@ -126,7 +126,7 @@ Material:
     - _NoiseOffset: {r: 1, g: 1, b: 1, a: 1}
     - _Polar_Tint: {r: 0.92941177, g: 0.8253711, b: 0.2588235, a: 1}
     - _TextureOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _TextureRotations: {r: 0, g: 0, b: 0, a: 0}
+    - _TextureRotations: {r: 16, g: 35, b: 42, a: 0}
     - _TextureTiling: {r: 1.25, g: 1.25, b: 0, a: 0}
     - _TimeScales: {r: 1, g: 2, b: 3, a: 4}
     - _TintBlendRegion1: {r: 0.15, g: 0.31, b: 0, a: 0}

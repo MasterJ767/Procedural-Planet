@@ -123,7 +123,7 @@ Material:
     - _MiddleTint: {r: 0.64760596, g: 0.7430581, b: 0.9339623, a: 1}
     - _Polar_Tint: {r: 0.55998576, g: 0.55998576, b: 0.9811321, a: 1}
     - _TextureOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _TextureRotations: {r: 0, g: 0, b: 0, a: 0}
+    - _TextureRotations: {r: 16, g: 35, b: 42, a: 0}
     - _TextureTiling: {r: 1.25, g: 1.25, b: 0, a: 0}
     - _TimeScales: {r: 1, g: 2, b: 3, a: 4}
     - _TintBlendRegion1: {r: 0.15, g: 0.31, b: 0, a: 0}

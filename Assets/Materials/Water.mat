@@ -96,7 +96,7 @@ Material:
     - _Direction3: {r: 0.05, g: 0, b: 0.01, a: 0}
     - _Direction4: {r: 0.01, g: 0, b: 0.05, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _EquatorialTint: {r: 0.26, g: 0.84, b: 0.93, a: 1}
+    - _EquatorialTint: {r: 0.25999996, g: 0.8399999, b: 0.93, a: 1}
     - _MiddleTint: {r: 0.64760596, g: 0.7430581, b: 0.9339623, a: 1}
     - _PolarTint: {r: 0.55998576, g: 0.55998576, b: 0.9811321, a: 1}
     - _TextureRotations: {r: 16, g: 35, b: 40, a: 0}

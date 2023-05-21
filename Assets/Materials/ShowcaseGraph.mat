@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WorldGraph
+  m_Name: ShowcaseGraph
   m_Shader: {fileID: -6465566751694194690, guid: fcdeac36f88c32e42a7a173d56081a47, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
@@ -43,19 +43,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GrassNormalTex:
-        m_Texture: {fileID: 2800000, guid: d06c19850ee13bf4086860fd02cf417d, type: 3}
+        m_Texture: {fileID: 2800000, guid: af579c7a89d15d24eb8c925a43a236cf, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GrassTex:
-        m_Texture: {fileID: 2800000, guid: f3c7e12938d22604eb51dc02b394dd80, type: 3}
+        m_Texture: {fileID: 2800000, guid: f5d1de47f0f760544a5596ceb8cc895f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _IceNormalTex:
-        m_Texture: {fileID: 2800000, guid: baff2356db4470441998023a27152ab7, type: 3}
+        m_Texture: {fileID: 2800000, guid: e5895469fa6440e4a876bf0672599e59, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _IceTex:
-        m_Texture: {fileID: 2800000, guid: be4940fee822ee54d99b3aef561d3fb1, type: 3}
+        m_Texture: {fileID: 2800000, guid: 12ff3c37d59e28240a8f4643c3ead3d3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -75,24 +75,24 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RockNormalTex:
-        m_Texture: {fileID: 2800000, guid: 817cd585ba4526143b4731066b0f0144, type: 3}
+        m_Texture: {fileID: 2800000, guid: 976578c11c0960440ad89e20acaebd3f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RockTex:
-        m_Texture: {fileID: 2800000, guid: 2978069445888204cb7ea4896fb1cb86, type: 3}
+        m_Texture: {fileID: 2800000, guid: 82d48bc9843dc3f47b277dbe0bd4db7c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SandNormalTex:
-        m_Texture: {fileID: 2800000, guid: 1ca8aa938472ee44881646574d844978, type: 3}
+        m_Texture: {fileID: 2800000, guid: bf5346a62bd7d0b43a30d8188cf4163e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SandTex:
-        m_Texture: {fileID: 2800000, guid: 59340c34796aba74f821afc78115b91c, type: 3}
+        m_Texture: {fileID: 2800000, guid: cd4f831376722b54bbadd59ef7c6c744, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Amplitude: 3
+    - _Amplitude: 7
     - _BUILTIN_AlphaClip: 1
     - _BUILTIN_Blend: 0
     - _BUILTIN_CullMode: 2
@@ -116,30 +116,30 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _NeighbourDistance: 0
-    - _NoiseScale: 6
+    - _NoiseScale: 7
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Radius: 4
+    - _Radius: 12
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TriplanarSharpness: 1
+    - _TriplanarSharpness: 10
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _BlendRegion1: {r: 0.67, g: 0.72, b: 0, a: 0}
-    - _BlendRegion2: {r: 0.77, g: 0.82, b: 0, a: 0}
-    - _BlendRegion3: {r: 0.87, g: 0.92, b: 0, a: 0}
+    - _BlendRegion1: {r: 0.7, g: 0.87, b: 0, a: 0}
+    - _BlendRegion2: {r: 0.87, g: 0.93, b: 0, a: 0}
+    - _BlendRegion3: {r: 0.93, g: 0.98, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _EquatorialTint: {r: 0.9339623, g: 0.8729219, b: 0.7445265, a: 1}
-    - _MiddleTint: {r: 1, g: 1, b: 1, a: 1}
-    - _NoiseOffset: {r: 111, g: 22, b: 33, a: 0}
-    - _PolarTint: {r: 0.73135453, g: 0.88731444, b: 0.8962264, a: 1}
-    - _TextureOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _TextureRotations: {r: 16, g: 35, b: 42, a: 0}
-    - _TextureTiling: {r: 1.25, g: 1.25, b: 0, a: 0}
+    - _EquatorialTint: {r: 0.9339623, g: 0.8417225, b: 0.63879496, a: 1}
+    - _MiddleTint: {r: 0.9528302, g: 0.87660056, b: 0.75956744, a: 1}
+    - _NoiseOffset: {r: 12, g: 240, b: 4800, a: 0}
+    - _PolarTint: {r: 0.8778378, g: 0.9150943, b: 0.6517889, a: 1}
+    - _TextureOffset: {r: 0.03, g: 0.95, b: 0, a: 0}
+    - _TextureRotations: {r: 17.03, g: 39.7, b: 55, a: 0}
+    - _TextureTiling: {r: 0.3, g: 0.3, b: 0, a: 0}
     - _TintBlendRegion1: {r: 0.15, g: 0.31, b: 0, a: 0}
     - _TintBlendRegion2: {r: 0.58, g: 0.74, b: 0, a: 0}
   m_BuildTextureStacks: []
