@@ -142,7 +142,7 @@ Shader "Unlit/WorldSphere"
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
-
+            
             fixed4 frag (v2f i) : SV_Target
             {
                 float2 tiling = float2(_TextureTilingOffset.x, _TextureTilingOffset.y);
